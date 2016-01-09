@@ -7,7 +7,6 @@ It uses the following Web APIs and technologies:
   - Youtube V3 API (JSON)
   - Google RSS News Feeds (XML)
   - Flickr API (XML)
-  - Flickr API (XML)
   - Foursquare API (JSON)
   - Google Maps Embed API (iframe)
 
