@@ -13,7 +13,7 @@ It uses the following Web APIs and technologies:
 Some of the tecniques covered are:
 
   - Lazy loading
-  - Infinite scrolling lists
+  - Passing data between screens
   - Resizable popups
   - Multi DPI development
   - Custom theme based on Quads
@@ -25,3 +25,4 @@ AIR 20 is recommended but it can work with earlier versions, such as 19 or 18.
 
 You can test this application in your Android devices by clicking on the Releases tab on this page and selecting the file 'CityApp.apk'.
 
+[![Watch on Youtube](http://i.imgur.com/9XwfenC.png)](https://youtu.be/x-LE-KRYxfk)
