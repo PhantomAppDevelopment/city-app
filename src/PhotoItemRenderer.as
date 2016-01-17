@@ -6,8 +6,6 @@ package
 	import feathers.layout.AnchorLayoutData;
 	import feathers.utils.touch.TapToSelect;
 	
-	import starling.display.Image;
-	
 	public class PhotoItemRenderer extends LayoutGroupListItemRenderer
 	{
 		protected var _image:ImageLoader;

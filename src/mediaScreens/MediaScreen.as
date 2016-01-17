@@ -31,9 +31,8 @@ package mediaScreens
 		private static const YOUTUBE_API_KEY:String = "";
 		private var searchTerm:String = "New York City";
 		private var pageToken:String;
-		private var recent:Boolean;
 		private var loading:Boolean;
-				
+		
 		protected var _data:NavigatorData;
 		
 		public function get data():NavigatorData
@@ -58,11 +57,10 @@ package mediaScreens
 			}
 			
 			pageToken = "";
-			recent = true;
 			
 			youtubeLoader = new URLLoader();
 			youtubeLoader.dataFormat = URLLoaderDataFormat.TEXT;
-			youtubeLoader.addEventListener(flash.events.Event.COMPLETE, recentVideosLoaded);
+			youtubeLoader.addEventListener(flash.events.Event.COMPLETE, youtubeVideosLoaded);
 			
 			var arrowIcon:ImageLoader = new ImageLoader();
 			arrowIcon.source = "assets/icons/ic_arrow_back_white_48dp.png";
@@ -154,13 +152,13 @@ package mediaScreens
 			
 			videosList.dataProvider = null;
 		}
-				
-		private function recentVideosLoaded(event:flash.events.Event):void
+		
+		private function youtubeVideosLoaded(event:flash.events.Event):void
 		{			
 			//Convert the JSON data to an object
 			var rawData:Object = JSON.parse(String(youtubeLoader.data));
 			pageToken = rawData.nextPageToken;
-								
+			
 			if(videosList.dataProvider == null){
 				var videosArray:ListCollection = new ListCollection(rawData.items as Array);
 				videosList.dataProvider = videosArray;
@@ -176,7 +174,6 @@ package mediaScreens
 		private function loadMore():void
 		{
 			if(!loading){
-				//myBusy.visible = true;
 				loading = true;
 				
 				if(mainTabBar.selectedItem.label == "Popular Videos"){
