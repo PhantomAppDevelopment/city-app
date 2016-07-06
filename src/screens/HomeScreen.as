@@ -1,7 +1,7 @@
 package screens
 {
-	import flash.system.System;
 	
+	import feathers.controls.BasicButton;
 	import feathers.controls.Button;
 	import feathers.controls.ImageLoader;
 	import feathers.controls.Label;
@@ -33,9 +33,7 @@ package screens
 			
 			var aboutIcon:ImageLoader = new ImageLoader();
 			aboutIcon.source = "assets/icons/ic_info_outline_white_48dp.png";
-			aboutIcon.width = 25;
-			aboutIcon.height = 25;
-			aboutIcon.snapToPixels = true;
+			aboutIcon.width = aboutIcon.height = 25;
 			
 			var aboutButton:Button = new Button();
 			aboutButton.width = 45;
@@ -66,7 +64,7 @@ package screens
 			orangeGroup.addChild(createLabel("NEWS"));
 			orangeGroup.addChild(createIcon("assets/icons/rss.png"));
 						
-			var newsButton:Button = new Button();
+			var newsButton:BasicButton = new BasicButton();
 			newsButton.addEventListener(Event.TRIGGERED, newsButtonHandler);
 			newsButton.layoutData = new AnchorLayoutData(0, 0, 0, 0)			
 			orangeGroup.addChild(newsButton);
@@ -89,7 +87,7 @@ package screens
 			blueGroup.addChild(createLabel("DIRECTORY"));
 			blueGroup.addChild(createIcon("assets/icons/ic_store_white_48dp.png"));
 			
-			var directoryButton:Button = new Button();
+			var directoryButton:BasicButton = new BasicButton();
 			directoryButton.addEventListener(Event.TRIGGERED, directoryButtonHandler);
 			directoryButton.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 			blueGroup.addChild(directoryButton);
@@ -112,7 +110,7 @@ package screens
 			greenGroup.addChild(createLabel("PHOTOS"));
 			greenGroup.addChild(createIcon("assets/icons/ic_local_see_white_48dp.png"));
 			
-			var photosButton:Button = new Button();
+			var photosButton:BasicButton = new BasicButton();
 			photosButton.addEventListener(Event.TRIGGERED, photosButtonHandler);
 			photosButton.layoutData = new AnchorLayoutData(0, 0, 0, 0)			
 			greenGroup.addChild(photosButton);
@@ -135,7 +133,7 @@ package screens
 			redGroup.addChild(createLabel("MEDIA"));
 			redGroup.addChild(createIcon("assets/icons/ic_theaters_white_48dp.png"));
 			
-			var mediaButton:Button = new Button();
+			var mediaButton:BasicButton = new BasicButton();
 			mediaButton.addEventListener(Event.TRIGGERED, mediaButtonHandler);
 			mediaButton.layoutData = new AnchorLayoutData(0, 0, 0, 0)			
 			redGroup.addChild(mediaButton);
@@ -148,7 +146,6 @@ package screens
 			icon.source = value;
 			icon.width = 40;
 			icon.height = 40;
-			icon.snapToPixels = true;
 			icon.layoutData = new AnchorLayoutData(NaN, NaN, NaN, 20, NaN, 0);
 			return icon;
 		}
@@ -157,9 +154,7 @@ package screens
 		{
 			var arrowIcon:ImageLoader = new ImageLoader();
 			arrowIcon.source = "assets/icons/ic_chevron_right_white_48dp.png";
-			arrowIcon.width = 45;
-			arrowIcon.height = 45;
-			arrowIcon.snapToPixels = true;
+			arrowIcon.width = arrowIcon.height = 45;
 			arrowIcon.layoutData = new AnchorLayoutData(NaN, 5, NaN, NaN, NaN, 0);
 			return arrowIcon;
 		}

@@ -7,6 +7,7 @@ package
 	
 	import feathers.controls.Button;
 	import feathers.controls.Header;
+	import feathers.controls.ImageLoader;
 	import feathers.controls.Label;
 	import feathers.controls.List;
 	import feathers.controls.PanelScreen;
@@ -17,10 +18,10 @@ package
 	import feathers.controls.renderers.DefaultListItemRenderer;
 	import feathers.controls.text.StageTextTextEditor;
 	import feathers.controls.text.TextBlockTextRenderer;
+	import feathers.controls.text.TextFieldTextRenderer;
 	import feathers.core.FeathersControl;
 	import feathers.core.ITextEditor;
 	import feathers.core.ITextRenderer;
-	import feathers.skins.SmartDisplayObjectStateValueSelector;
 	import feathers.themes.StyleNameFunctionTheme;
 	
 	import starling.display.Quad;
@@ -30,17 +31,10 @@ package
 	{
 		[Embed(source="assets/font.otf", fontFamily="MyFont", fontWeight="normal", fontStyle="normal", mimeType="application/x-font", embedAsCFF="true")]
 		private static const MY_FONT:Class;
-		
-		private var whiteText:ElementFormat = new ElementFormat(new FontDescription("_sans"), 12, 0xFFFFFF);
-		private var blackText:ElementFormat = new ElementFormat(new FontDescription("_sans"), 12, 0x000000);
-		
-		private var transparentQuad:Quad = new Quad(3, 3, 0xFFFFFF);
-		
+
 		public function CustomTheme()
 		{
-			super();
-			
-			this.transparentQuad.alpha = 0.0;
+			super();			
 			this.initialize();
 		}
 		
@@ -65,9 +59,9 @@ package
 		
 		private function initializeStyleProviders():void
 		{
+			this.getStyleProviderForClass(Button).setFunctionForStyleName("back-button", this.setBackButtonStyles);
 			this.getStyleProviderForClass(Button).setFunctionForStyleName("transparent-button", this.setTransparentButtonStyles);
 			this.getStyleProviderForClass(Button).setFunctionForStyleName("header-button", this.setHeaderButtonStyles);
-			this.getStyleProviderForClass(Button).defaultStyleFunction = this.setButtonStyles;
 			this.getStyleProviderForClass(DefaultListItemRenderer).defaultStyleFunction = this.setItemRendererStyles;
 			this.getStyleProviderForClass(Header).defaultStyleFunction = this.setHeaderStyles;
 			this.getStyleProviderForClass(Label).defaultStyleFunction = this.setLabelStyles;
@@ -114,40 +108,27 @@ package
 		// Button
 		//-------------------------
 		
-		private function setButtonStyles(button:Button):void
+		private function setBackButtonStyles(button:Button):void
 		{
+			var transparentQuad:Quad = new Quad(3, 3, 0xFFFFFF);
+			transparentQuad.alpha = 0.20;
 			
-			var skin:Sprite = new Sprite();
-			skin.height = 50;
+			var arrowIcon:ImageLoader = new ImageLoader();
+			arrowIcon.width = arrowIcon.height = 25;
+			arrowIcon.source = "assets/icons/ic_arrow_back_white_48dp.png";
 			
-			var topColor:uint = 0x444444;
-			var bottomColor:uint = 0x000000;
-			
-			var quad:Quad = new Quad(1, 50);
-			quad.setVertexColor(0, topColor);
-			quad.setVertexColor(1, topColor);
-			quad.setVertexColor(2, bottomColor);
-			quad.setVertexColor(3, bottomColor);
-			
-			skin.addChild(quad);
-			
-			var blueBar:Quad = new Quad(1, 5, 0x0099FF);
-			blueBar.y = skin.height;
-			
-			skin.addChild(blueBar);
-			
-			skin.flatten();
-			
-			button.defaultSkin = skin;
-			button.downSkin = new Quad(3, 3, 0x000000);
-			
-			button.defaultLabelProperties.elementFormat = whiteText;
+			button.width = button.height = 45;
+			button.defaultIcon = arrowIcon;
+			button.downSkin = transparentQuad;
 		}
 		
 		private function setTransparentButtonStyles(button:Button):void
 		{
-			button.defaultSkin = transparentQuad;
-			button.downSkin = transparentQuad;
+			var quad:Quad = new Quad(3, 3, 0xFFFFF);
+			quad.alpha = 0;
+			
+			button.defaultSkin = quad;
+			button.downSkin = quad;
 		}
 		
 		//-------------------------
@@ -219,26 +200,33 @@ package
 		}
 		
 		private function setItemRendererStyles(renderer:BaseDefaultItemRenderer):void
-		{
-			var skinSelector:SmartDisplayObjectStateValueSelector = new SmartDisplayObjectStateValueSelector();
-			
-			skinSelector.defaultValue = 0x333333;
-			skinSelector.defaultSelectedValue = 0x11A9FF;
-			skinSelector.setValueForState(0x11A9FF, Button.STATE_DOWN, false);
-			renderer.stateToSkinFunction = skinSelector.updateValue;
+		{			
+			renderer.defaultSkin = new Quad(3, 3, 0x333333);
+			renderer.defaultSelectedSkin = new Quad(3, 3, 0x11A9FF);
+			renderer.downSkin = new Quad(3, 3, 0x11A9FF);
 			
 			renderer.horizontalAlign = Button.HORIZONTAL_ALIGN_LEFT;
 			renderer.paddingLeft = 10;
 			renderer.paddingRight = 0;
-			renderer.paddingTop = 5;
-			renderer.paddingBottom = 5;
+			renderer.paddingTop = 10;
+			renderer.paddingBottom = 10;
 			renderer.gap = 10;
 			renderer.minHeight = 55;
-			renderer.defaultLabelProperties.leading = 7;
 			renderer.accessoryGap = Number.POSITIVE_INFINITY;
 			renderer.iconPosition = Button.ICON_POSITION_LEFT;
 			renderer.accessoryPosition = BaseDefaultItemRenderer.ACCESSORY_POSITION_RIGHT;
-			renderer.defaultLabelProperties.elementFormat = whiteText;
+			renderer.labelFactory = function():ITextRenderer
+			{
+				var renderer:TextFieldTextRenderer = new TextFieldTextRenderer();
+				renderer.isHTML = true;
+				renderer.wordWrap = true;
+				
+				var format:TextFormat = new TextFormat("_sans", 14, 0xFFFFFF);
+				format.leading = 7;
+				
+				renderer.textFormat = format;
+				return renderer;
+			};
 		}	
 		
 		//-------------------------
@@ -269,7 +257,16 @@ package
 			button.selectedDownSkin = defaultSelectedSkin;
 			button.defaultSelectedSkin = defaultSelectedSkin;
 			
-			button.defaultLabelProperties.elementFormat = whiteText;
+			button.labelFactory = function():ITextRenderer
+			{
+				var renderer:TextBlockTextRenderer = new TextBlockTextRenderer();
+				
+				var font:FontDescription = new FontDescription("MyFont");
+				font.fontLookup = FontLookup.EMBEDDED_CFF;
+				
+				renderer.elementFormat =new ElementFormat(font, 14, 0xFFFFFF);
+				return renderer;
+			}
 		}
 		
 		//-------------------------

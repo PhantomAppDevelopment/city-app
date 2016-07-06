@@ -51,28 +51,16 @@ package mediaScreens
 			
 			this.title = "Media";
 			this.layout = new AnchorLayout();
-			this.backButtonHandler = function():void
-			{
-				this.dispatchEventWith(starling.events.Event.COMPLETE);
-			}
+			this.backButtonHandler = goBack;
 			
 			pageToken = "";
 			
 			youtubeLoader = new URLLoader();
 			youtubeLoader.dataFormat = URLLoaderDataFormat.TEXT;
 			youtubeLoader.addEventListener(flash.events.Event.COMPLETE, youtubeVideosLoaded);
-			
-			var arrowIcon:ImageLoader = new ImageLoader();
-			arrowIcon.source = "assets/icons/ic_arrow_back_white_48dp.png";
-			arrowIcon.width = 25;
-			arrowIcon.height = 25;
-			arrowIcon.snapToPixels = true;
-			
+
 			var backButton:Button = new Button();
-			backButton.width = 45;
-			backButton.height = 45;
-			backButton.styleNameList.add("header-button");
-			backButton.defaultIcon = arrowIcon;
+			backButton.styleNameList.add("back-button");
 			backButton.addEventListener(starling.events.Event.TRIGGERED, goBack);
 			this.headerProperties.leftItems = new <DisplayObject>[backButton];
 			
@@ -86,28 +74,34 @@ package mediaScreens
 				//Our item renderer has no special interaction, this property greatly increases performance.
 				renderer.isQuickHitAreaEnabled = true;
 				
-				renderer.accessoryFunction = function():ImageLoader{
+				renderer.accessoryLoaderFactory = function():ImageLoader
+				{
 					var loader:ImageLoader = new ImageLoader();
-					loader.width = 35;
-					loader.height = 35;
-					loader.snapToPixels = true;
-					loader.source = "assets/icons/ic_chevron_right_white_48dp.png";
+					loader.width = loader.height = 35;
 					return loader;
+				};
+				
+				renderer.accessorySourceFunction = function():String
+				{
+					return "assets/icons/ic_chevron_right_white_48dp.png";
 				}
 				
-				renderer.iconFunction = function(item:Object):ImageLoader
+				renderer.iconLoaderFactory = function():ImageLoader
 				{
 					var loader:ImageLoader = new ImageLoader();
 					loader.width = 70;
 					loader.height = 60;
-					loader.snapToPixels = true;
-					loader.source = item.snippet.thumbnails["default"].url;
 					return loader;
 				}
 				
+				renderer.iconSourceFunction = function(item:Object):String
+				{
+					return item.snippet.thumbnails["default"].url;
+				}
+					
 				renderer.labelFunction = function(item:Object):String
 				{
-					return item.snippet.title + "\n" + item.snippet.channelTitle;
+					return "<b>" + item.snippet.title + "</b>\n" + item.snippet.channelTitle;
 				}
 				
 				return renderer;				
@@ -198,7 +192,8 @@ package mediaScreens
 			dispatchEventWith(GO_VIDEO_DETAILS);
 		}
 		
-		private function goBack(event:starling.events.Event):void{
+		private function goBack():void
+		{
 			this.dispatchEventWith(starling.events.Event.COMPLETE);
 		}
 	}

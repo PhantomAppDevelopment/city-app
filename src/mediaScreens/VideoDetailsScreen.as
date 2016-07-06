@@ -4,7 +4,6 @@ package mediaScreens
 	import flash.desktop.SystemIdleMode;
 	
 	import feathers.controls.Button;
-	import feathers.controls.ImageLoader;
 	import feathers.controls.PanelScreen;
 	import feathers.controls.WebView;
 	import feathers.events.FeathersEventType;
@@ -16,8 +15,9 @@ package mediaScreens
 	
 	public class VideoDetailsScreen extends PanelScreen
 	{
-		protected var _data:NavigatorData;
 		private var webView:WebView;
+
+		protected var _data:NavigatorData;
 		
 		public function get data():NavigatorData
 		{
@@ -33,26 +33,12 @@ package mediaScreens
 		{
 			super.initialize();						
 
-			//this.addEventListener(Event.REMOVED_FROM_STAGE, removeHandler);
-			
 			this.title = this._data.videoinfo.snippet.title;
 			this.layout = new AnchorLayout();
-			this.backButtonHandler = function():void
-			{
-				this.dispatchEventWith(Event.COMPLETE);
-			}
-			
-			var arrowIcon:ImageLoader = new ImageLoader();
-			arrowIcon.source = "assets/icons/ic_arrow_back_white_48dp.png";
-			arrowIcon.width = 25;
-			arrowIcon.height = 25;
-			arrowIcon.snapToPixels = true;
+			this.backButtonHandler = goBack;
 			
 			var backButton:Button = new Button();
-			backButton.width = 45;
-			backButton.height = 45;
-			backButton.styleNameList.add("header-button");
-			backButton.defaultIcon = arrowIcon;
+			backButton.styleNameList.add("back-button");
 			backButton.addEventListener(Event.TRIGGERED, goBack);
 			this.headerProperties.leftItems = new <DisplayObject>[backButton];
 			
@@ -77,7 +63,7 @@ package mediaScreens
 			webView.dispose();
 		}
 		
-		private function goBack(event:Event):void{
+		private function goBack():void{
 			this.dispatchEventWith(Event.COMPLETE);
 		}
 	}

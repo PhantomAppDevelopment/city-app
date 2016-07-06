@@ -46,29 +46,12 @@ package photoScreens
 			
 			this.title = "Photos";
 			this.layout = new AnchorLayout();
-			this.backButtonHandler = function():void
-			{
-				if(popupOpen)
-				{
-					PopUpManager.removePopUp(popup, true);
-				}
-				
-				this.dispatchEventWith(starling.events.Event.COMPLETE);
-			}
+			this.backButtonHandler = goBack;
 			
 			popupOpen = false;
-				
-			var arrowIcon:ImageLoader = new ImageLoader();
-			arrowIcon.source = "assets/icons/ic_arrow_back_white_48dp.png";
-			arrowIcon.width = 25;
-			arrowIcon.height = 25;
-			arrowIcon.snapToPixels = true;
 			
 			var backButton:Button = new Button();
-			backButton.width = 45;
-			backButton.height = 45;
-			backButton.styleNameList.add("header-button");
-			backButton.defaultIcon = arrowIcon;
+			backButton.styleNameList.add("back-button");
 			backButton.addEventListener(starling.events.Event.TRIGGERED, goBack);
 			this.headerProperties.leftItems = new <DisplayObject>[backButton];
 			
@@ -142,7 +125,6 @@ package photoScreens
 			closeIcon.source = "assets/icons/ic_highlight_off_white_48dp.png";
 			closeIcon.width = 25;
 			closeIcon.height = 25;
-			closeIcon.snapToPixels = true;
 			
 			var closeButton:Button = new Button();
 			closeButton.addEventListener(starling.events.Event.TRIGGERED, closePopup);
@@ -189,7 +171,13 @@ package photoScreens
 			popupOpen = false;
 		}
 		
-		private function goBack(event:starling.events.Event):void{
+		private function goBack():void
+		{
+			if(popupOpen)
+			{
+				PopUpManager.removePopUp(popup, true);
+			}
+			
 			this.dispatchEventWith(starling.events.Event.COMPLETE);
 		}
 	}

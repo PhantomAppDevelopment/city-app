@@ -52,22 +52,10 @@ package businessScreens
 			
 			this.title = _data.categoryinfo.label;
 			this.layout = new AnchorLayout();
-			this.backButtonHandler = function():void
-			{
-				this.dispatchEventWith(starling.events.Event.COMPLETE);
-			}
-			
-			var arrowIcon:ImageLoader = new ImageLoader();
-			arrowIcon.source = "assets/icons/ic_arrow_back_white_48dp.png";
-			arrowIcon.width = 25;
-			arrowIcon.height = 25;
-			arrowIcon.snapToPixels = true;
+			this.backButtonHandler = goBack;
 			
 			var backButton:Button = new Button();
-			backButton.width = 45;
-			backButton.height = 45;
-			backButton.styleNameList.add("header-button");
-			backButton.defaultIcon = arrowIcon;
+			backButton.styleNameList.add("back-button");
 			backButton.addEventListener(starling.events.Event.TRIGGERED, goBack);
 			this.headerProperties.leftItems = new <DisplayObject>[backButton];
 			
@@ -77,34 +65,38 @@ package businessScreens
 			businessList.itemRendererFactory = function():IListItemRenderer
 			{
 				var renderer:DefaultListItemRenderer = new DefaultListItemRenderer();
+				renderer.isQuickHitAreaEnabled = true;
 				
 				renderer.labelFunction = function(item:Object):String
 				{
 					if(item.location.address == undefined)
 					{
 						if(item.categories.length != 0){
-							return item.name + "\n" + item.categories[0].name;
+							return "<b>" + item.name + "</b>\n" + item.categories[0].name;
 						} else {
 							return item.name;
 						}
 					} else {
 						if(item.categories.length != 0){
-							return item.name + "\n" + item.location.address + "\n" + item.categories[0].name;
+							return "<b>" + item.name + "</b>\n" + item.location.address + "\n" + item.categories[0].name;
 						} else {
 							return item.name;
 						}
 					}
 				}
 												
-				renderer.accessoryFunction = function():ImageLoader{
+				renderer.accessoryLoaderFactory = function():ImageLoader
+				{
 					var loader:ImageLoader = new ImageLoader();
-					loader.width = 35;
-					loader.height = 35;
-					loader.snapToPixels = true;
-					loader.source = "assets/icons/ic_chevron_right_white_48dp.png";
+					loader.width = loader.height = 35;
 					return loader;
-				}
+				};
 				
+				renderer.accessorySourceFunction = function():String
+				{
+					return "assets/icons/ic_chevron_right_white_48dp.png";
+				}
+			
 				return renderer;
 			}
 			this.addChild(businessList);
@@ -138,7 +130,8 @@ package businessScreens
 			dispatchEventWith(GO_VENUE_DETAILS);
 		}
 		
-		private function goBack(event:starling.events.Event):void{
+		private function goBack():void
+		{
 			this.dispatchEventWith(starling.events.Event.COMPLETE);
 		}
 	}

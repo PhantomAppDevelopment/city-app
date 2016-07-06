@@ -47,22 +47,10 @@ package newsScreens
 			
 			this.title = "News";
 			this.layout = new AnchorLayout();
-			this.backButtonHandler = function():void
-			{
-				this.dispatchEventWith(starling.events.Event.COMPLETE);
-			}
-			
-			var arrowIcon:ImageLoader = new ImageLoader();
-			arrowIcon.source = "assets/icons/ic_arrow_back_white_48dp.png";
-			arrowIcon.width = 25;
-			arrowIcon.height = 25;
-			arrowIcon.snapToPixels = true;
+			this.backButtonHandler = goBack;
 						
 			var backButton:Button = new Button();
-			backButton.width = 45;
-			backButton.height = 45;
-			backButton.styleNameList.add("header-button");
-			backButton.defaultIcon = arrowIcon;
+			backButton.styleNameList.add("back-button");
 			backButton.addEventListener(starling.events.Event.TRIGGERED, goBack);
 			this.headerProperties.leftItems = new <DisplayObject>[backButton];
 					
@@ -74,17 +62,21 @@ package newsScreens
 				var renderer:DefaultListItemRenderer = new DefaultListItemRenderer();
 				renderer.isQuickHitAreaEnabled = true;
 				
-				renderer.accessoryFunction = function():ImageLoader{
+				renderer.accessoryLoaderFactory = function():ImageLoader
+				{
 					var loader:ImageLoader = new ImageLoader();
-					loader.width = 35;
-					loader.height = 35;
-					loader.snapToPixels = true;
-					loader.source = "assets/icons/ic_chevron_right_white_48dp.png";
+					loader.width = loader.height = 35;
 					return loader;
+				};
+				
+				renderer.accessorySourceFunction = function():String
+				{
+					return "assets/icons/ic_chevron_right_white_48dp.png";
 				}
 				
-				renderer.labelFunction = function(item:Object):String{
-					return item.title + "\n" + item.pubDate;
+				renderer.labelFunction = function(item:Object):String
+				{
+					return "<b>" + item.title + "</b>\n" + item.pubDate;
 				}
 					
 				return renderer;
@@ -141,7 +133,8 @@ package newsScreens
 			dispatchEventWith(GO_NEWS_DETAILS);
 		}
 		
-		private function goBack(event:starling.events.Event):void{
+		private function goBack():void
+		{
 			this.dispatchEventWith(starling.events.Event.COMPLETE);
 		}
 	}
