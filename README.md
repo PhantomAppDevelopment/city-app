@@ -29,4 +29,4 @@ You will also need AIR 21 or greater, FeathersUI 3.0.2 and Starling 2.0.1.
 
 You can test this app by downloading it directly from GitHub.
 
-[![Download](http://i.imgur.com/sYA22o3.png)](https://)
+[![Download](http://i.imgur.com/sYA22o3.png)](https://github.com/PhantomAppDevelopment/cityapp/releases/download/1.1.0/CityApp.apk)
