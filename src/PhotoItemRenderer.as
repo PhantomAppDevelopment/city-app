@@ -19,6 +19,7 @@ package
 			
 		override protected function initialize():void
 		{
+			this.width = this.height = 70;
 			this.layout = new AnchorLayout();
 			
 			_image = new ImageLoader();
